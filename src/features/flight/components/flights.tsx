@@ -13,6 +13,7 @@ export function Flights({ flights }: Props) {
       {flights.map((flight) => (
         <FlightCard flight={flight} key={flight.id} />
       ))}
+      {flights.length===0 && <Box>Пусто :\ </Box>}
     </BoxStyle>
   );
 }

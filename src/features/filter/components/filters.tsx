@@ -9,31 +9,37 @@ interface Props {
 }
 
 export function Filters({ flights, setFlights }: Props) {
-  const [origin, setOrigin] = useState<IFlights>([]);
+  const [originFlights, setOriginFlights] = useState<IFlights>([]);
+
+  const [destinationFlights, setDestinationFlights] = useState<IFlights>([]);
+
+
+
 
   const handleOriginCity = (city: string) => {
     const filtered = data.flights.filter((flight) =>
-      flight.origin.toLowerCase().includes(city.toLowerCase())
+      flight.origin.toLowerCase().startsWith(city.toLowerCase())
     );
     setFlights(filtered);
-    setOrigin(filtered);
+    setOriginFlights(filtered);
   };
 
   const handleDestinationCity = (city: string) => {
-    const filtered = origin.filter((flight) =>
-      flight.destination.toLowerCase().includes(city.toLowerCase())
+    const filtered = originFlights.filter((flight) =>
+      flight.destination.toLowerCase().startsWith(city.toLowerCase())
     );
     setFlights(filtered);
+    setDestinationFlights(filtered);
   };
 
   const handleTransferQuantity = (quantity: number) => {
     if (quantity) {
-      const filtered = data.flights.filter(
+      const filtered = destinationFlights.filter(
         (flight) => flight.layovers.length === quantity
       );
       setFlights(filtered);
-    }else{
-        setFlights(data.flights)
+    } else {
+      setFlights(destinationFlights);
     }
   };
 
