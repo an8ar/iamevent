@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Box, TextField, Button } from "@mui/material";
 import { IFlights } from "../../flight";
-import data from "../../../data/fly.json";
+import { filter } from "../../../utils/filter";
 
 interface Props {
   setFlights: React.Dispatch<React.SetStateAction<IFlights>>;
@@ -9,54 +9,61 @@ interface Props {
 }
 
 export function Filters({ flights, setFlights }: Props) {
-  const [originFlights, setOriginFlights] = useState<IFlights>([]);
+  const [originName, setOriginName] = useState("");
 
-  const [destinationFlights, setDestinationFlights] = useState<IFlights>([]);
+  const [destinationName, setDestinationName] = useState("");
 
+  const [stopsQuantity, setStopsQuantity] = useState("");
 
+  const [flightMinPrice, setFlightMinPrice] = useState(0);
 
+  const [flightMaxPrice, setFlightMaxPrice] = useState(800);
 
-  const handleOriginCity = (city: string) => {
-    const filtered = data.flights.filter((flight) =>
-      flight.origin.toLowerCase().startsWith(city.toLowerCase())
+  const handleClick = () => {
+    const filtered = filter(
+      originName,
+      destinationName,
+      stopsQuantity,
+      flightMinPrice,
+      flightMaxPrice
     );
     setFlights(filtered);
-    setOriginFlights(filtered);
   };
-
-  const handleDestinationCity = (city: string) => {
-    const filtered = originFlights.filter((flight) =>
-      flight.destination.toLowerCase().startsWith(city.toLowerCase())
-    );
-    setFlights(filtered);
-    setDestinationFlights(filtered);
-  };
-
-  const handleTransferQuantity = (quantity: number) => {
-    if (quantity) {
-      const filtered = destinationFlights.filter(
-        (flight) => flight.layovers.length === quantity
-      );
-      setFlights(filtered);
-    } else {
-      setFlights(destinationFlights);
-    }
-  };
-
   return (
     <Box sx={{ gap: 2, display: "flex", flexDirection: "column", mt: 2 }}>
       <TextField
         placeholder="Город отправления"
-        onChange={(e) => handleOriginCity(e.target.value)}
+        value={originName}
+        onChange={(e) => setOriginName(e.target.value)}
       />
       <TextField
         placeholder="Город прилета"
-        onChange={(e) => handleDestinationCity(e.target.value)}
+        value={destinationName}
+        onChange={(e) => setDestinationName(e.target.value)}
       />
       <TextField
         placeholder="Количество остановок"
-        onChange={(e) => handleTransferQuantity(parseInt(e.target.value, 10))}
+        value={stopsQuantity}
+        onChange={(e) => setStopsQuantity(e.target.value)}
       />
+      <TextField
+        placeholder="Минимальная цена"
+        value={flightMinPrice}
+        onChange={(e) => {
+          const value = e.target.value;
+          const parsedValue = value !== "" ? parseInt(value) : 0;
+          setFlightMinPrice(parsedValue);
+        }}
+      />
+      <TextField
+        placeholder="Максимальная цена"
+        value={flightMaxPrice}
+        onChange={(e) => {
+            const value = e.target.value;
+            const parsedValue = value !== "" ? parseInt(value) : 800;
+            setFlightMaxPrice(parsedValue);
+          }}      />
+      <Button onClick={handleClick}>Найти</Button>
     </Box>
   );
 }

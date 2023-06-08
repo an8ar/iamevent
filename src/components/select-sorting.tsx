@@ -6,7 +6,7 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { IFlights } from "../features/flight";
 import { useSortByPrice, useSortByTransfers } from "../hooks";
-import data from '../data/fly.json'
+import data from "../data/fly.json";
 interface Props {
   setFlights: React.Dispatch<React.SetStateAction<IFlights>>;
   flights: IFlights;
@@ -16,22 +16,20 @@ export function SelectSorting({ setFlights, flights }: Props) {
   const sortedByPrice = useSortByPrice(flights);
 
   const sortedByTransfers = useSortByTransfers(flights);
-  
+
   const [sorting, setSorting] = React.useState<string>("");
 
   const handleChange = (event: SelectChangeEvent) => {
     setSorting(event.target.value);
     if (parseInt(event.target.value, 10) === 1) {
       setFlights(sortedByPrice);
-    }else if(parseInt(event.target.value, 10) === 2){
+    } else if (parseInt(event.target.value, 10) === 2) {
       setFlights(sortedByTransfers);
-    }else{
-      setFlights(data.flights);
-    }
+    } 
   };
 
   return (
-    <Box sx={{ minWidth: 120 }}>
+    <Box sx={{ minWidth: 195 }}>
       <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">Сортировать</InputLabel>
         <Select

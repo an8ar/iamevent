@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Button } from "@mui/material";
+import { Box, Button, styled } from "@mui/material";
 import { Filters } from "../features/filter";
 import { Flights, IFlights } from "../features/flight";
 import data from "../data/fly.json";
@@ -15,14 +15,22 @@ export function Home() {
 
   return (
     <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
-      <Box >
+      <BoxStyle >
         <SelectSorting setFlights={setFlights} flights={flights} />
         <Filters setFlights={setFlights} flights={flights} />
         <Button onClick={cancelFilters}>Отмена</Button>
-      </Box>
+      </BoxStyle>
 
       <Flights flights={flights} />
     </Box>
   );
 }
 
+const BoxStyle = styled(Box)(({ theme }) => ({
+    display: "flex",
+    flexDirection: 'column', alignItems: 'center',
+    [theme.breakpoints.down("md")]: {
+        width: '100%',
+    },
+  }));
+  
